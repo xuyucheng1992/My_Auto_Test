@@ -1,6 +1,6 @@
 Collections:
   case_dec: 商户端月租列表    #测试用例集描述
-  host : http://192.168.1.235:8088  #域名
+  host : https://uapi.flashparking.cn  #域名
 #  header: { # 必填
 #    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
 #                Chrome/67.0.3396.99 Safari/537.36",
@@ -10,17 +10,17 @@ Collections:
     -
       title: 查询月租列表  #测试用例
       case_id: sh_moth_odrder_case_001 #每个文件里都维护个case_id
-      url: /v1/parkSecurity/v2securityOrderList# 路径
+      url: /v1/parkSecurity/v2securityOrderList # 路径
       method: post #请求方法
       data:
 #          mobile: 18621289233
 #          verifycode: 618652 #如果入参是拼接url后面的则维护在此处
-        json: # 如果入参是json格式的则维护在此处
-          businessId: 77
-          parkCode: '51178828'
-          type: 2
-          page: 1
-          pageSize: 100
+      json: # 如果入参是json格式的则维护在此处
+        businessId: 77
+        parkCode: '51178828'
+        type: 2
+        page: 1
+        pageSize: 100
 
 
 

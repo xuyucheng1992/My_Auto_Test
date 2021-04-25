@@ -1,7 +1,7 @@
 #
 Collections:
   case_dec: dome    #测试用例集描述
-  host : http://192.168.1.235:8088  #域名
+  host : https://uapi.flashparking.cn  #域名
   parameters:
     -
       title: 获取会员信息  #接口名
@@ -14,7 +14,6 @@ Collections:
 #        mid: $mId
 #        page: 1
 #        pageSize: 1000
-
       validate: # 断言，期望值
         - eq: #eq 是封装的断言方法
           - returncode: 0000
@@ -22,11 +21,6 @@ Collections:
         - login_case_001: #从哪个用例中获取
           - mId
           - c_token
-
-
-
-
-
       relevance: # 提取出去的参数
         - plateNumber: "['responsebody']['list'][0]['parkCode']['plateNumber']"
 

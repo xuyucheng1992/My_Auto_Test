@@ -121,8 +121,10 @@ class ComParams():
                 param_value["method"] = method
 
                 # data
-                re_data = str(parameter["data"])
-                param_value["data"] = re_data
+                if 'data' in parameter:
+
+                    re_data = str(parameter["data"])
+                    param_value["data"] = re_data
 
                 if 'json' in parameter:
                     param_value["json_data"] = parameter["json"]

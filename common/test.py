@@ -79,7 +79,7 @@ for param in params:
         if variable_data.find('='):
             variable_url = variable_url +'?'+ variable_data
         response =requests.request(method=variable_method,url=variable_url)
-        # print(response.json())
+        print(response.json())
         variable_relevances = variable_param[0]['relevance']
         # print(variable_relevances)
         # variable_relevances 是个dict组成的 list
