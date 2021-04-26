@@ -40,3 +40,5 @@ class ComConfig:
         xml_report_path = os.path.join(self.base_path, xml_dir_path)
         html_report_path = os.path.join(self.base_path, html_dir_path)
         return xml_report_path, html_report_path
+if __name__ == '__main__':
+    ComConfig().test_params_path()

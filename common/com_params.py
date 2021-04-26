@@ -10,6 +10,7 @@
 """
 from common.com_yaml import ComYaml
 from common.com_config import ComConfig
+from common.com_request import send_requests
 from pathlib import PurePath
 from jsonpath_rw import parse
 
@@ -21,7 +22,7 @@ import jsonpath
 
 class ComParams():
 
-    def yaml_params2(self,yaml_path):
+    def yaml_params2(self, yaml_path):
         """
 
         :param yaml_path:
@@ -54,14 +55,14 @@ class ComParams():
 
                     apis_params.append(api_param)
                     # print(f'处理后的{api_param}')
-                    api_param={}
+                    api_param = {}
         elif str(yaml_path).endswith(".yaml"):
             api_param['case_dec'] = params['Collections']['case_dec']
             # api_param['host'] = params['Collections']['host']
             # if  len(data['Collections']['host']['parameters'])
             for data_parameters in params['Collections']['parameters']:
                 api_param['case_id'] = data_parameters['case_id']
-                api_param['url'] = params['Collections']['host'] +data_parameters['url']
+                api_param['url'] = params['Collections']['host'] + data_parameters['url']
                 api_param['method'] = data_parameters['method']
                 api_param['title'] = data_parameters['title']
                 api_param['data'] = data_parameters['data']
@@ -74,15 +75,14 @@ class ComParams():
                 api_param['relevance'] = data_parameters['relevance']
 
                 apis_params.append(api_param)
-                api_param ={}
-
-
+                api_param = {}
 
         # print(apis_params)
         return apis_params
 
         # json.load(apis_params)
-    def yaml_params(self,yaml_path):
+
+    def yaml_params(self, yaml_path):
         """
 
         :param yaml_path: 文件路径
@@ -122,7 +122,6 @@ class ComParams():
 
                 # data
                 if 'data' in parameter:
-
                     re_data = str(parameter["data"])
                     param_value["data"] = re_data
 
@@ -172,34 +171,69 @@ class ComParams():
 
         return pytest_values
 
-
-    def get_relevance_param(self,):
+    def params_can_requests(self, yaml_path, yaml_name):
         """
-
-
-        :return:
+        替换请求中的$param
+        :param yaml_path: 文件路径
+        :param yaml_name：文件名
+        :return: 返回处理好的数据,和test_params 返回的数据结构一样
         """
+        # 读取文件内的请求参数
+        params = ComParams().test_params(yaml_path, yaml_name)
+        params_can_requests = []
+        for param in params:  # 循环每个请求，判断是否有前置参数,并做替换操作
+            if 'variables_data' in str(param):
+                variables_data = param[0]["variables_data"]
+                variables = eval(param[0]['variables'])
+                variable_relevances_new = ComParams().get_replace_param(yaml_path, variables)
+                for variable_data in variables_data:
+                    param = str(param).replace(F"${variable_data}", str(variable_relevances_new[variable_data]))
+                    param = eval(param)
+            params_can_requests.append(param)
+        return params_can_requests
 
-
-
-
-    def get_replace_param(self,variables):
+    def get_replace_param(self, yaml_path, variables):
         """
-        :param variables: 传入：variables': [{'login_case_001': ['mId', 'c_token']}]
+        :param variables: 传入variables = eval(param[0]['variables'])
+                         [{'login_case_001': ['mId', 'c_token']},{'login_case_002': ['mId', 'c_token']}]
         根据login_case_001可知，需要调用login_case_001来获取数据，如果是单个文件读取，那我还需要再次读取login_case_001文件
         先按照单个文件读取来玩
-        :return: 返回case_id,mId
+        :return: 返回 login_case_001 中提取的值
         """
         # 处理variables列表
-        # 如[{'login|case_001': ['mId']}]
+        # [{'login_case_001': ['mId', 'c_token']}]
         # 处理成 [ ['login_case_001','mId']，['login_case_001','c_token']]
-        yaml_path = ComConfig().test_params_path()
-        print(yaml_path)
-        for variable in variables:
-            print(variable.items())
-            for item in variable.items():
-                file_name = item[0].split('_')[0]+'.yaml'
-                print(file_name)
+        for i in variables:
+            #
+            for case in i.items():
+                variable_from_file = case[0].split('_')[0]
+                variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
+            variable_from_file = variable_from_file + '.yaml'
+            variable_params = ComParams().test_params(yaml_path, variable_from_file)
+            # 找到读取用例中的case_id相应的参数
+            for variable_param in variable_params:
+                if variable_from_case in str(variable_param[0]):
+                    variable_param = variable_param
+            response = send_requests(variable_param)
+            variable_relevances = variable_param[0]['relevance']
+            # print(variable_relevances)
+            # variable_relevances 是个dict组成的 list
+            variable_relevances_new = {}  # 将关联参数的key：value的形式存在新的dict中
+            for relevance in eval(variable_relevances):
+                # relevance 是 key：value  mId：$..mId
+                for key, value in relevance.items():
+                    # 根据value $..mId 提取出response中的值
+                    find_value = [match.value for match in parse(value).find(response)]
+                    # print(find_value) # [81555438]，['dd2005dba9404de183773b3b8c0a1dac']
+
+                    variable_relevances_new[key] = find_value[0]
+            # 针对token 专门做下处理
+            if 'token' in str(variable_relevances_new):
+                mid = variable_relevances_new["mId"]
+                token = variable_relevances_new["c_token"]
+                variable_relevances_new["c_token"] = str(mid) + '_' + token
+            print(variable_relevances_new)
+            return variable_relevances_new
 
     def test_params(self, yaml_path, yaml_name):
         """
@@ -228,7 +262,6 @@ class ComParams():
 
         return new_params_titles
 
-
     def param_to_requesr(self):
         '''
 
@@ -238,31 +271,22 @@ class ComParams():
         pass
 
 
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
-    path = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/dome.yaml'
-    # 我这一股脑的读出来，怎么确定执行顺序呢，如果有不想执行的怎么办
-    apis = ComParams().yaml_params(path)
-    print(apis)
-    path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/'
-
-    test_apis = ComParams().test_params(path2,'dome.yaml')
-    print(test_apis)
+    # path = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/dome.yaml'
+    # # 我这一股脑的读出来，怎么确定执行顺序呢，如果有不想执行的怎么办
+    # apis = ComParams().yaml_params(path)
     # print(apis)
-    # a = jsonpath.jsonpath(apis[0],'$..variables')
-    # b = apis[0]["variables"]
-    # # print(len(a))
-    # # print(b)
-    # ComParams().get_replace_param(b)
+    path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
 
+    test_apis = ComParams().params_can_requests(path2, 'dome.yaml')
+    print(test_apis)
+    # for test_api in test_apis:
+    #     variables = eval(test_api[0]['variables'])
+    #     ComParams().get_replace_param(path2, variables)
 
+# print(apis)
+# a = jsonpath.jsonpath(apis[0],'$..variables')
+# b = apis[0]["variables"]
+# # print(len(a))
+# # print(b)
+# ComParams().get_replace_param(b)
