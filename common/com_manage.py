@@ -9,6 +9,10 @@
 
 class ComManage():
 
-    def manage_request(self):
+    def manage_request(self,a):
+        """
 
-        pass
+        :param a:
+        :return:
+        """
+
