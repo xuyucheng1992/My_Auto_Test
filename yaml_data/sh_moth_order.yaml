@@ -26,7 +26,7 @@ Collections:
 
 
       validate: # 断言，期望值
-        - eq: #eq 是封装的断言方法
+        - equal: #equal 是封装的断言方法
             - returncode
             - 0000
 

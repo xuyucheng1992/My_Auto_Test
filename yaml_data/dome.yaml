@@ -1,4 +1,3 @@
-#
 Collections:
   case_dec: dome    #测试用例集描述
   host : https://uapi.flashparking.cn  #域名
@@ -15,9 +14,9 @@ Collections:
 #        page: 1
 #        pageSize: 1000
       validate: # 断言，期望值
-        - eq: #eq 是封装的断言方法
-          - returncode
-          - 0000
+        - equal: #equal 是封装的断言方法
+          - $..returncode
+          - '00001'
       variables:  #需要获取的变量值（本用例需要）
         - login_case_001: #从哪个用例中获取
           - mId
@@ -39,9 +38,9 @@ Collections:
 
 
       validate: # 断言，期望值
-        - eq: #eq 是封装的断言方法
-            - returncode
-            - 0000
+        - equal: #equal 是封装的断言方法
+            - $..returncode
+            - '0000'
 
       variables:  #需要获取的变量值（本用例需要）
         - login_case_001: #从哪个用例中获取case_id

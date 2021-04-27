@@ -10,7 +10,7 @@
 """
 from common.com_yaml import ComYaml
 from common.com_config import ComConfig
-from common.com_request import send_requests
+from common.com_request import ComRequests
 from pathlib import PurePath
 from jsonpath_rw import parse
 
@@ -24,7 +24,7 @@ class ComParams():
 
     def yaml_params2(self, yaml_path):
         """
-
+        已废弃
         :param yaml_path:
         :return: 返回:dec title url data method json urlparams validate
         """
@@ -214,7 +214,7 @@ class ComParams():
             for variable_param in variable_params:
                 if variable_from_case in str(variable_param[0]):
                     variable_param = variable_param
-            response = send_requests(variable_param)
+            response = ComRequests().send_requests(variable_param)
             variable_relevances = variable_param[0]['relevance']
             # print(variable_relevances)
             # variable_relevances 是个dict组成的 list
@@ -223,7 +223,7 @@ class ComParams():
                 # relevance 是 key：value  mId：$..mId
                 for key, value in relevance.items():
                     # 根据value $..mId 提取出response中的值
-                    find_value = [match.value for match in parse(value).find(response)]
+                    find_value = [match.value for match in parse(value).find(response.json())]
                     # print(find_value) # [81555438]，['dd2005dba9404de183773b3b8c0a1dac']
 
                     variable_relevances_new[key] = find_value[0]
@@ -278,7 +278,7 @@ if __name__ == '__main__':
     # print(apis)
     path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
 
-    test_apis = ComParams().params_can_requests(path2, 'dome.yaml')
+    test_apis = ComParams().params_can_requests(path2, 'login.yaml')
     print(test_apis)
     # for test_api in test_apis:
     #     variables = eval(test_api[0]['variables'])

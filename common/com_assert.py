@@ -48,5 +48,5 @@ class ComAssert():
 
 
 if __name__=='__main__':
-    a = ComAssert().equal([111],[11])
+    a = ComAssert().equal([21],[11])
     print(a)

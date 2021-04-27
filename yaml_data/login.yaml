@@ -18,9 +18,12 @@ Collections:
 #
 
       validate: # 断言，期望值
-        - eq: #eq 是封装的断言方法
-            - $..returncode  # 提取response的jsonpath表达式，即实际结果
-            - 0000  # 提取出的字段值预期
+        - equal: #实际和预期 相等
+            - $..returncode  # 提取response的jsonpath表达式，即实际结果(返回匹配到的第一个值
+            - '0000'  # 提取出的字段值预期
+        - contain: # 实际中包含预期
+            - text  # 固定值，指 response.text
+            - 18621289233
 
 #      variables:  #需要获取的变量值（本用例需要）
 
