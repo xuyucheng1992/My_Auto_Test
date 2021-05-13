@@ -15,7 +15,6 @@ from common.com_config import ComConfig
 from common.com_manage import ComManage
 
 class TestDome():
-    # Parameter_pool = []#全局变量，存放替换参数的值
     path = ComConfig().test_params_path()
     params = ComParams().params_can_requests(path, 'dome.yaml')
 
@@ -27,4 +26,4 @@ class TestDome():
 
 
 if __name__ == '__main__':
-    pytest.main(['-s','-v','test_dome.py'])
+    pytest.main(['-sv','test_dome.py'])

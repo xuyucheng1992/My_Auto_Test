@@ -3,11 +3,16 @@
 # @time   : 2021/4/22 17:17
 # @Author : XuYu
 
-import requests
+
 import json
+
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import urllib3
 
-urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class ComRequests():
@@ -43,11 +48,12 @@ class ComRequests():
             url = params_req['url']
 
         if 'json_data' not in str(params_req):
-            return requests.request(method, url, verify=False)
+            return requests.request(method, url, verify=True)
         elif 'json_data' in str(params_req):
             # 这里需要格式化json 可调用的
             json_data = self.to_json(params_req['json_data'])
-            return requests.request(method, url, json=json_data, verify=False)
+
+            return requests.request(method, url, json=json_data)
 
     def to_json(self, json_data):
         # 讲请求中的json参数 序列化

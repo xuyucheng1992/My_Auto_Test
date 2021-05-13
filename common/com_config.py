@@ -18,6 +18,7 @@ class ComConfig:
 
     # test_path
     PARAMS_FOLDER_PATH = "params_folder_path"
+    C_HOST = "c_host"
 
     def __init__(self):
         self.cp = ConfigParser()
@@ -40,5 +41,14 @@ class ComConfig:
         xml_report_path = os.path.join(self.base_path, xml_dir_path)
         html_report_path = os.path.join(self.base_path, html_dir_path)
         return xml_report_path, html_report_path
+
+    def get_c_host(self):
+        return self.__get_value("c_host", "c_host")
+
+    def get_p_host(self):
+        return self.__get_value("p_host", "p_host")
+
+
 if __name__ == '__main__':
-    ComConfig().test_params_path()
+    # ComConfig().test_params_path()
+    print(ComConfig().get_p_host())

@@ -114,7 +114,12 @@ class ComParams():
                     param_value["url"] = url
                     if not url.startswith("/"):
                         url = "/" + url
-                param_value["url"] = value["host"] + url
+                if value["host"] == "c_host":
+                    host = ComConfig().get_c_host()
+                    param_value["url"] = host + url
+                if value["host"] == "p_host":
+                    host = ComConfig().get_p_host()
+                    param_value["url"] = host + url
 
                 # method
                 method = str(parameter["method"])
@@ -144,7 +149,7 @@ class ComParams():
                     param_value["relevance"] = relevance
 
                 # 非必须：依赖数据（后置用例），获取parameter中所有以$开头的字段
-                variables_data = re.findall("\$[A-za-z0-9]+", str(parameter))
+                variables_data = re.findall("\\$[A-za-z0-9]+", str(parameter))
                 if variables_data:
                     values = []
                     for j in variables_data:

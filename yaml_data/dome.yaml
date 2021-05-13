@@ -1,6 +1,6 @@
 Collections:
   case_dec: dome    #测试用例集描述
-  host : https://uapi.flashparking.cn  #域名
+  host : c_host  #域名
   parameters:
     -
       title: 获取会员信息  #接口名
@@ -16,7 +16,7 @@ Collections:
       validate: # 断言，期望值
         - equal: #equal 是封装的断言方法
           - $..returncode
-          - '00001'
+          - '0000'
       variables:  #需要获取的变量值（本用例需要）
         - login_case_001: #从哪个用例中获取
           - mId

@@ -1,6 +1,6 @@
 Collections:
   case_dec: login    #测试用例集描述
-  host : https://uapi.flashparking.cn  #域名
+  host : c_host  #域名
 #  header: { # 必填
 #    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
 #                Chrome/67.0.3396.99 Safari/537.36",
