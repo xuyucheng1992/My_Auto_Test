@@ -132,7 +132,7 @@ for param in params:
 
 
 
-def jion_token(variable_relevances_new):
+def join_token(variable_relevances_new):
     mid = variable_relevances_new[0]["mId"]
 
 
