@@ -1,0 +1,6 @@
+pytest==6.2.3
+jsonpath_rw==1.4.0
+urllib3==1.26.4
+jsonpath==0.82
+requests==2.25.1
+PyYAML==5.4.1

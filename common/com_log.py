@@ -3,3 +3,6 @@
 # @Time     : 2021/5/7 23:34
 # @Author   : XuYu
 
+import logging
+
+logging.basicConfig()
