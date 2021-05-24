@@ -209,7 +209,6 @@ class ComParams():
         # [{'login_case_001': ['mId', 'c_token']}]
         # 处理成 [ ['login_case_001','mId']，['login_case_001','c_token']]
         for i in variables:
-            #
             for case in i.items():
                 variable_from_file = case[0].split('_')[0]
                 variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
@@ -219,6 +218,11 @@ class ComParams():
             for variable_param in variable_params:
                 if variable_from_case in str(variable_param[0]):
                     variable_param = variable_param
+
+            if 'variables_data' in str(variable_param):
+                variables = eval(variable_param[0]['variables'])
+                return ComParams().get_replace_param(yaml_path, variables)
+
             response = ComRequests().send_requests(variable_param)
             variable_relevances = variable_param[0]['relevance']
             # print(variable_relevances)
@@ -267,13 +271,36 @@ class ComParams():
 
         return new_params_titles
 
-    def param_to_requesr(self):
+    def param_to_requesr(self, yaml_path, yaml_name):
         '''
+        读取文件
+        判断是否有关联参数
+            如果有就读取出关联参数的文件名
+            读取该文件
+            判断该文件是否有关联参数
+                如果有就读取出关联参数的文件名
+                读取该文件
+                判断该文件是否有关联参数
+                    如果没有，就调用该文件内的接口，并返回关联参数值
 
         :return: 把数据处理成可直接调-----主要是关联参数的替换
 
         '''
-        pass
+        params = ComParams().test_params(yaml_path, yaml_name)
+        params_can_requests = []
+        for param in params:  # 循环每个请求，判断是否有前置参数
+            if 'variables_data' not in str(param):
+                params_can_requests.append(param)
+            if 'variables_data' in str(param):
+                variables_data = param[0]["variables_data"]
+                variables = eval(param[0]['variables'])
+                for i in variables:
+                    for case in i.items():
+                        variable_from_file = case[0].split('_')[0]
+                        variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
+                    variable_from_file = variable_from_file + '.yaml'
+                    return ComParams().param_to_requesr(yaml_path, variable_from_file)
+            return params_can_requests
 
 
 if __name__ == '__main__':
@@ -283,7 +310,7 @@ if __name__ == '__main__':
     # print(apis)
     path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
 
-    test_apis = ComParams().params_can_requests(path2, 'login.yaml')
+    test_apis = ComParams().params_can_requests(path2, 'searchCouponsDetail.yaml')
     print(test_apis)
     # for test_api in test_apis:
     #     variables = eval(test_api[0]['variables'])

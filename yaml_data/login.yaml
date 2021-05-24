@@ -12,7 +12,7 @@ Collections:
       case_id: login_case_001 #每个文件里都维护个case_id
       url: /v1/member/login # 路径
       method: post #请求方法
-      data: mobile=18621289233&verifycode=931136
+      data: mobile=18621289233&verifycode=292603
 #          mobile: 18621289233
 #          verifycode: 618652 #如果入参是拼接url后面的则维护在此处
 #
