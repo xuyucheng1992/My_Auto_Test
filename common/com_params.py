@@ -220,7 +220,7 @@ class ComParams():
             for variable_param in variable_params:
                 if variable_from_case in str(variable_param[0]):
                     variable_param = variable_param
-            response = ComRequests().send_requests(variable_param)
+            response = ComRequests().send_requests(variable_param[0])
             variable_relevances = variable_param[0]['relevance']
             # print(variable_relevances)
             # variable_relevances 是个dict组成的 list
@@ -327,9 +327,12 @@ if __name__ == '__main__':
     test_apis = ComParams().params_can_requests(path2, 'searchCouponsDetail.yaml')
     print(test_apis)
     """
-    bar = [{'searchCouponsList_case_001': ['couponsCode']}, {'login_case_001': [ 'c_token']}]
-    a = ComParams().get_replace_param(path,bar)
-    print(a)
+    path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
+    test_apis = ComParams().params_can_requests(path2, 'searchCouponsDetail.yaml')
+    print(test_apis[0])
+    # bar = [{'searchCouponsList_case_001': ['couponsCode']}, {'login_case_001': [ 'c_token']}]
+    # a = ComParams().params_can_requests(path,bar)
+    # print(a)
 
     # for test_api in test_apis:
     #     variables = eval(test_api[0]['variables'])

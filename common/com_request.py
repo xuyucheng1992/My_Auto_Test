@@ -5,6 +5,9 @@
 
 
 import json
+import logging
+
+from common.com_log import ComLog
 
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -14,7 +17,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
+ComLog().use_log()
 class ComRequests():
 
     def send_requests(self, params):
@@ -35,11 +38,15 @@ class ComRequests():
 
         :return: response
         """
-        params_req = params[0]
+        params_type = type(params)
+        logging.info(F"send_request接受到的参数是:{params},数据类型为:{params_type}")
+        params_req = params
+
         # print(type(params_req))
         # print(params_req)
 
         method = params_req['method']
+
 
         if '=' in str(params_req['data']):  # 判断请求信息 是否需要传body
 
@@ -48,10 +55,13 @@ class ComRequests():
             url = params_req['url']
 
         if 'json_data' not in str(params_req):
-            return requests.request(method, url, verify=True)
+            logging.info(f"请求url={url},请求方式={method}")
+
+            return requests.request(method, url, verify=False)
         elif 'json_data' in str(params_req):
             # 这里需要格式化json 可调用的
             json_data = self.to_json(params_req['json_data'])
+            logging.info(f"请求url={url},请求方式={method},参数={json_data}")
 
             return requests.request(method, url, json=json_data)
 

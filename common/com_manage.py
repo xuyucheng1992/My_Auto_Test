@@ -16,9 +16,13 @@ from common.com_params import ComParams
 from common.com_config import ComConfig
 from common.com_request import ComRequests
 from common.com_assert import ComAssert
+import logging
 
-from jsonpath_rw import jsonpath,parse
+from common.com_log import ComLog
 
+from jsonpath_rw import jsonpath, parse
+
+ComLog().use_log()
 
 
 class ComManage():
@@ -32,41 +36,35 @@ class ComManage():
 
         """
         # 调用接口获取数据
+        logging.info(f"入口函数manage_request接受到的参数{request_param}")
         resp = ComRequests().send_requests(request_param)
-        validates = request_param[0]['validate']
+        logging.info(f"请求接口响应结果是{resp}")
+        validates = request_param['validate']
         # 提取validate中的实际值
-        validates_new = self.process_validate(resp,validates)
+        validates_new = self.process_validate(resp, validates)
         # 做断言
         for validate in validates_new:
             assert self.manage_assert(validate)
         return True
 
-
-
-
-
-
-    def process_validate(self,resp,validates):
+    def process_validate(self, resp, validates):
         """
         根据响应内容和断言 提取实际的接口值
         :param resp:
         :param validates:
         :return:
         """
-        validates_new=[]
+        validates_new = []
         # 可能有多个断言
         for validate in eval(validates):
             for key, value in validate.items():
                 # print(value[0])
-                resp_value = self.process_resp(resp,value[0])
-                validates_new.append(str(validate).replace(value[0],str(resp_value)))
+                resp_value = self.process_resp(resp, value[0])
+                validates_new.append(str(validate).replace(value[0], str(resp_value)))
         # print(validates_new)
         return validates_new
 
-
-
-
-    def process_resp(self,resp,resp_type):
+    def process_resp(self, resp, resp_type):
         """
 
         :param reqp: 接口响应
@@ -78,10 +76,7 @@ class ComManage():
         else:
             return [math.value for math in parse(resp_type).find(resp.json())][0]
 
-
-
-
-    def manage_assert(self,validate):
+    def manage_assert(self, validate):
         """
         断言函数，根据validates_new中的断言方法，调用对应的断言函数
         :param validates_new:
@@ -92,21 +87,19 @@ class ComManage():
             assert_type = key
             expect = value[1]
             actual = value[0]
-            if assert_type=='equal':
-                return ComAssert().equal(expect,actual)
-            elif assert_type =='contain':
-                return ComAssert().contain(expect,actual)
-            elif assert_type=='not_contain':
-                return ComAssert().not_contain(expect,actual)
+            if assert_type == 'equal':
+                return ComAssert().equal(expect, actual)
+            elif assert_type == 'contain':
+                return ComAssert().contain(expect, actual)
+            elif assert_type == 'not_contain':
+                return ComAssert().not_contain(expect, actual)
 
 
-
-
-
-
-if __name__ =='__main__':
-
-    parasm = [{'case_id': 'login_case_001', 'url': 'https://uapi.flashparking.cn/v1/member/login', 'method': 'post', 'data': 'mobile=18621289233&verifycode=931136', 'validate': "[{'equal': ['$..returncode', 0000]}, {'contain': ['text', 18621289233]}]", 'relevance': "[{'mId': '$..mId'}, {'c_token': '$..token'}]"}, '登录']
+if __name__ == '__main__':
+    parasm = [{'case_id': 'login_case_001', 'url': 'https://uapi.flashparking.cn/v1/member/login', 'method': 'post',
+               'data': 'mobile=18621289233&verifycode=931136',
+               'validate': "[{'equal': ['$..returncode', 0000]}, {'contain': ['text', 18621289233]}]",
+               'relevance': "[{'mId': '$..mId'}, {'c_token': '$..token'}]"}, '登录']
 
     ComManage().manage_request(parasm)
     # resp_type = '$..returncode'
@@ -114,7 +107,3 @@ if __name__ =='__main__':
     # resp = ComRequests().send_requests(parasm)
     # cpr = ComManage().process_resp(resp,resp_type)
     # print(cpr)
-
-
-
-

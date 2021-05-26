@@ -35,8 +35,8 @@ class ComConfig:
         return os.path.join(self.base_path, self.__get_value(self.TEST_PATH, self.PARAMS_FOLDER_PATH))
 
     def get_report_path(self):
-        xml_dir_path = os.path.join("report", time.strftime("%m-%d-%H") + "\\xml")
-        html_dir_path = os.path.join("report", time.strftime("%m-%d-%H") + "\\html")
+        xml_dir_path = os.path.join("reports", time.strftime("%m-%d-%H") + "xml")
+        html_dir_path = os.path.join("reports", time.strftime("%m-%d-%H") + "html")
 
         xml_report_path = os.path.join(self.base_path, xml_dir_path)
         html_report_path = os.path.join(self.base_path, html_dir_path)

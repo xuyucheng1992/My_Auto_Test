@@ -2,3 +2,9 @@
 /workspace.xml
 
 /venv/
+
+/.pytest_cache/
+
+/reports/
+
+/log/
