@@ -39,7 +39,7 @@ class ComRequests():
         :return: response
         """
         params_type = type(params)
-        logging.info(F"send_request接受到的参数是:{params},数据类型为:{params_type}")
+        # logging.info(F"send_request接受到的参数是:{params},数据类型为:{params_type}")
         params_req = params
 
         # print(type(params_req))

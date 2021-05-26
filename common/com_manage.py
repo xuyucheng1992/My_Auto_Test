@@ -17,7 +17,6 @@ from common.com_config import ComConfig
 from common.com_request import ComRequests
 from common.com_assert import ComAssert
 import logging
-
 from common.com_log import ComLog
 
 from jsonpath_rw import jsonpath, parse
@@ -36,9 +35,9 @@ class ComManage():
 
         """
         # 调用接口获取数据
-        logging.info(f"入口函数manage_request接受到的参数{request_param}")
+        # logging.info(f"入口函数manage_request接受到的参数{request_param}")
         resp = ComRequests().send_requests(request_param)
-        logging.info(f"请求接口响应结果是{resp}")
+        logging.info(f"请求接口响应结果是{resp.json()}")
         validates = request_param['validate']
         # 提取validate中的实际值
         validates_new = self.process_validate(resp, validates)

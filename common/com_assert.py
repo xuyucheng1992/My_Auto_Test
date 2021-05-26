@@ -11,6 +11,9 @@
     # contain # 包含
     # not_contain  # 不包含
 """
+import logging
+from common.com_log import ComLog
+ComLog().use_log()
 
 
 class ComAssert():
@@ -22,6 +25,7 @@ class ComAssert():
         :param actual: 实际结果
         :return:
         """
+        logging.info(f"断言方式为相等，预期结果={expect},实际结果={actual}")
         assert str(expect) == str(actual)
         return True
 
@@ -32,6 +36,8 @@ class ComAssert():
         :param actual: 实际结果
         :return:
         """
+        logging.info(f"断言方式为包含，预期结果={expect},实际结果={actual}")
+
         assert str(expect) in str(actual)
         return True
 
@@ -42,6 +48,8 @@ class ComAssert():
         :param actual: 实际结果
         :return:
         """
+        logging.info(f"断言方式为不包含，预期结果={expect},实际结果={actual}")
+
         assert str(expect) not in str(actual)
         return True
 
