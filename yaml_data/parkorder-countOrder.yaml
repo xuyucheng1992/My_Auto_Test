@@ -1,0 +1,19 @@
+Collections:
+  case_dec: 月租-计算订单金额
+  host : c_host
+  parameters:
+    -
+      title: 验证车位包列表是否正常-已登录
+      case_id: parkorder-countOrder_case_001
+      url: /v1/parkorder/countOrder
+      method: post
+      data: longitude=121.388428&latitude=31.209069&page=1&pageSize=10&accesstoken=$c_token
+      validate: # 断言，期望值
+        - equal: #equal 是封装的断言方法
+          - $..returncode
+          - '0000'
+      variables:  #需要获取的变量值（本用例需要）
+        - login_case_001: # 从哪个用例中获取
+          - c_token
+      relevance: # 提取出去的参数
+        - couponsCode: $..couponsCode

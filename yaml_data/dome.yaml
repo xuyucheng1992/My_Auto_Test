@@ -48,4 +48,27 @@ Collections:
 
       relevance: # 提取出去的参数
         - plateNumber: "['responsebody']['list'][0]['parkCode']['plateNumber']"
+    - title: 长租卡列表  #接口名
+      case_id: dome_case_002
+
+      url: /v1/parkOrderCard/getParkOrderCardList # 路径
+      method: post #请求方法
+      data: mid=$mId&page=1&pageSize=1000 #如果入参是拼接url后面的则维护在此处
+      #        mid: $mId
+      #        page: 1
+      #        pageSize: 1000
+
+
+
+      validate: # 断言，期望值
+        - equal: #equal 是封装的断言方法
+            - $..returncode
+            - '0000'
+
+      variables: #需要获取的变量值（本用例需要）
+        - login_case_001: #从哪个用例中获取case_id
+            - mId #获取的字段值
+
+      relevance: # 提取出去的参数
+        - plateNumber: "['responsebody']['list'][0]['parkCode']['plateNumber']"
 

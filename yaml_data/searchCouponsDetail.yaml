@@ -2,6 +2,11 @@ Collections:
   case_dec: 车位包详情
   host : c_host
   parameters:
+
+# 验证车位包详情页接口是否正常-已登录
+# 验证车位包详情页-打开已下架的车位包-提示已下架
+# 验证车位包详情页-
+
     -
       title: 验证车位包详情页接口是否正常-已登录
       case_id: searchCouponsDetail_case_001

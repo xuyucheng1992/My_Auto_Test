@@ -15,15 +15,36 @@ from common.com_params import ComParams
 from common.com_config import ComConfig
 from common.com_manage import ComManage
 
+path = ComConfig().test_params_path()
 
-@allure.feature('dome')
+
+@allure.feature('dome_feature')
 class TestDome:
-    path = ComConfig().test_params_path()
     params = ComParams().params_can_requests(path, 'dome.yaml')
-    print(params)
 
+    @allure.title("{title}")
     @pytest.mark.parametrize("param,title", params)
     def test_case_001(self, param, title):
+        assert ComManage().manage_request(param)
+
+
+@allure.feature('车位包详情')
+class TestCouponsDetail:
+    params_searchCouponsDetail = ComParams().params_can_requests(path, 'searchCouponsDetail.yaml')
+
+    @allure.title("{title}")
+    @pytest.mark.parametrize("param,title", params_searchCouponsDetail)
+    def test_case_002(self, param, title):
+        assert ComManage().manage_request(param)
+
+
+@allure.feature('车位包列表')
+class TestCouponsList:
+    params_searchCouponsList = ComParams().params_can_requests(path, 'searchCouponsList.yaml')
+
+    @allure.title("{title}")
+    @pytest.mark.parametrize("param,title", params_searchCouponsList)
+    def test_case_003(self, param, title):
         assert ComManage().manage_request(param)
 
 
