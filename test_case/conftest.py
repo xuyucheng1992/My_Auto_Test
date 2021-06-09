@@ -4,7 +4,7 @@
 # @Author : XuYu
 
 """
-pytest的前置函数仓
+pytest的fixture函数仓
 """
 import pytest
 from common.com_params import ComParams

@@ -11,7 +11,7 @@
 3.处理断言结果
 
 """
-
+from common.com_config import ComConfig
 from common.com_params import ComParams
 from common.com_config import ComConfig
 from common.com_request import ComRequests
@@ -45,6 +45,11 @@ class ComManage():
         for validate in validates_new:
             assert self.manage_assert(validate)
         return True
+
+
+    def manage_test_params(self,file_name):
+        path = ComConfig().test_params_path()
+        return ComParams().params_can_requests(path, file_name)
 
     def process_validate(self, resp, validates):
         """

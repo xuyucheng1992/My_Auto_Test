@@ -19,7 +19,7 @@ class ComLog:
     def use_log(self, log_level=logging.INFO):
         # log_path = PurePath(str(Path.r(target=__file__)), "log", str(time.strftime('%m_%d', time.localtime())) + '_error.log')
         log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "log",
-                                str(time.strftime('%m_%d', time.localtime())) + '_error.log')
+                                str(time.strftime('%m_%d', time.localtime())) + '_info.log')
         logging.basicConfig(
             filename=log_path,
             filemode='a+',

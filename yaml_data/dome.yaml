@@ -42,6 +42,7 @@ Collections:
             - $..returncode
             - '0000'
 
+
       variables:  #需要获取的变量值（本用例需要）
         - login_case_001: #从哪个用例中获取case_id
             - mId #获取的字段值

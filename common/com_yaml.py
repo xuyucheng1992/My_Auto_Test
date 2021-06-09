@@ -38,24 +38,24 @@ class ComYaml:
     def read_yaml(self, yml_path):
         """
         遍历文件夹下的所有yaml文件，拆分其中的dec和parameters，并设置为字典的键值对，返回字典
-        :param yml_path: yaml文件路径 或 yaml文件路径
+        :param yml_path: yaml文件路径
         :return: {dec1:parameters1, dec2:parameters2}
         """
         values_dict = {}
-        values_list = []
+        # values_list = []
         # 判断路径是否是文件夹、获取该文件夹下所有的yml文件、并遍历
-        if Path(yml_path).is_dir():  # 读取多个文件的根据不行
-            # print([x for x in list(Path(yml_path).glob("**/*.yaml"))])
-            for file in [x for x in list(Path(yml_path).glob("**/*.yaml"))]:
-                data_dict = self.__read_yaml(file)
-                # print(data_dict)
-                values_list.append(data_dict)
-            # print(values_list)
-            return values_list
+        # if Path(yml_path).is_dir():  # 读取多个文件的根据不行
+        #     # print([x for x in list(Path(yml_path).glob("**/*.yaml"))])
+        #     for file in [x for x in list(Path(yml_path).glob("**/*.yaml"))]:
+        #         data_dict = self.__read_yaml(file)
+        #         # print(data_dict)
+        #         values_list.append(data_dict)
+        #     # print(values_list)
+        #     return values_list
 
-        elif str(yml_path).endswith(".yaml"):
+        if str(yml_path).endswith(".yaml"):
             # print('执行这里了')
-            file = yml_path  # 为了log服务才这样赋值的
+            file = yml_path
             data_dict = self.__read_yaml(file)
             for test_name, parameters in data_dict.items():
                 values_dict[test_name] = parameters

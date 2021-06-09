@@ -7,13 +7,13 @@ Collections:
       case_id: bindingDeductingCoupon_001
       url: /v1/parkDeduction/bindingDeductingCoupon
       method: post
-      data: mId=81001558&couponNo=uhl19&accesstoken=
+      data: mId=81001558&couponNo=&accesstoken=
       validate: # 断言，期望值
         - equal: #equal 是封装的断言方法
           - $..returncode
           - '0000'
       variables:  #需要获取的变量值（本用例需要）
-        - login_case_001: # 从哪个用例中获取
+        - db: # 从哪个用例中获取
           - c_token
       relevance: # 提取出去的参数
         - couponsCode: $..couponsCode
