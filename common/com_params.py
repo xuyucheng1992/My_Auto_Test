@@ -242,7 +242,7 @@ class ComParams():
 
     def test_params(self, yaml_path, yaml_name):
         """
-        获取指定yaml测试文件的数据 （为了配合pytest的pytest.mark.parametrize；对应test_xx.py）
+        获取指定yaml测试文件的数据
         :param yaml_path: yaml所在文件夹路径
         :param yaml_name: yaml文件名称
         :return:

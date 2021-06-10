@@ -16,11 +16,10 @@ from common.com_params import ComParams
 from common.com_config import ComConfig
 from common.com_request import ComRequests
 from common.com_assert import ComAssert
-import logging
 from common.com_log import ComLog
-
+from common.com_db import ComDB
 from jsonpath_rw import jsonpath, parse
-
+import logging
 ComLog().use_log()
 
 
@@ -53,8 +52,8 @@ class ComManage():
 
     def process_validate(self, resp, validates):
         """
-        根据响应内容和断言 提取实际的接口值
-        :param resp:
+        根据响应内容和断言 提
+        :param resp:取实际的接口值
         :param validates:
         :return:
         """
@@ -89,7 +88,12 @@ class ComManage():
         validate = eval(validate)
         for key, value in validate.items():
             assert_type = key
-            expect = value[1]
+            # 判断预期值是否需要查询数据库
+            if 'from' in value[1]:
+                resluts = ComDB().db_select(value[1])
+                expect = ComDB().format_list(resluts)[0]
+            else:
+                expect = value[1]
             actual = value[0]
             if assert_type == 'equal':
                 return ComAssert().equal(expect, actual)
