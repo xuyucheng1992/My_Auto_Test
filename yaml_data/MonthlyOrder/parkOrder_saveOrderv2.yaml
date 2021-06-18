@@ -1,0 +1,19 @@
+Collections:
+  case_dec: 提交预约单
+  host : c_host
+  parameters:
+    -
+      title: 提交预约单——base
+      case_id: parkOrder_saveOrderv2
+      url: /v2/parkorder/saveOrder
+      method: post
+      data: orderCode=&mId=81555438&servicePrice=0&advanceAmount=20.00&discountPrice=0&preferentialAmount=0&welfareAmount=0&walletAmount=20.00&receivableAmount=0&productCode=121028254512&parkCode=51113218&planEnterTime=2021-06-17 00:00:00&planOutTime=2021-07-17 00:00:00&plateNumber=津ABCDEF2&contactTelephone=18621289233&timeType=2&paymentMethod=1&planTimeLength=1个月&campId=&couponNo=&price=20&month=1&accesstoken=81555438_e0f53656f2444d248e3106df5828f5fb&access_token=81555438_e0f53656f2444d248e3106df5828f5fb&sourceChannelName=阿达撒多&shareCode=11331
+      validate: # 断言，期望值
+        - equal: #equal 是封装的断言方法
+          - $..returncode
+          - '0000'
+      variables:  #需要获取的变量值（本用例需要）
+        -  # 从哪个用例中获取
+        -
+      relevance: # 提取出去的参数
+        - couponsCode: $..couponsCode

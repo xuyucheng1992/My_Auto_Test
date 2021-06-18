@@ -1,14 +1,9 @@
 Collections:
   case_dec: login    #测试用例集描述
   host : c_host  #域名
-#  header: { # 必填
-#    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
-#                Chrome/67.0.3396.99 Safari/537.36",
-#    "Content-Type": "keep-alive"
-#  }
   parameters:
     -
-      title: 登录  #测试用例
+      title: 登录-测试用户a  #测试用例
       case_id: login_case_001 #每个文件里都维护个case_id
       url: /v1/member/login # 路径
       method: post #请求方法
@@ -31,3 +26,25 @@ Collections:
         - mId: $..mId
         - c_token: $..token
 
+    - title: 登录-测试用户b  #
+      case_id: login_case_002 #每个文件里都维护个case_id
+      url: /v1/member/login # 路径
+      method: post #请求方法
+      data: mobile=18621289251&verifycode=111111
+      #          mobile: 18621289233
+      #          verifycode: 618652 #如果入参是拼接url后面的则维护在此处
+      #
+
+      validate: # 断言，期望值
+        - equal: #实际和预期 相等
+            - $..returncode  # 提取response的jsonpath表达式，即实际结果(返回匹配到的第一个值
+            - '0000'  # 提取出的字段值预期
+        - contain: # 实际中包含预期
+            - text  # 固定值，指 response.text
+            - 18621289251
+
+      #      variables:  #需要获取的变量值（本用例需要）
+
+      relevance: # 提取出去的参数
+        - mId: $..mId
+        - c_token: $..token

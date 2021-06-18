@@ -1,0 +1,21 @@
+Collections:
+  case_dec: 车位包-车场详情页-可用停车劵
+  host : c_host
+  parameters:
+
+    -
+      title: 车位包-车场详情页-可用停车劵
+      case_id: parkCouponsDetail_case_001
+      url: /v1/mkCoupons/parkCouponsDetail
+      method: post
+      data: parkCode=51781019&accesstoken=$c_token
+      validate: # 断言，期望值
+        - equal: #equal 是封装的断言方法
+          - $..returncode
+          - '0000'
+      variables:  #需要获取的变量值（本用例需要）
+        - searchCouponsList_case_001: # 从哪个用例中获取
+          - couponsCode
+        - login_case_001:
+          - c_token
+

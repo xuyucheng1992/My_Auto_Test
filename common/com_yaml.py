@@ -22,8 +22,8 @@ import os
     里面有关联参数的，
 """
 
-class ComYaml:
 
+class ComYaml:
     @staticmethod
     def __read_yaml(yaml_path):
         """
@@ -32,7 +32,9 @@ class ComYaml:
         :return: {}
         """
 
-        dict_data = yaml.load(open(yaml_path, 'r', encoding="utf-8"), Loader=yaml.FullLoader)
+        dict_data = yaml.load(
+            open(yaml_path, "r", encoding="utf-8"), Loader=yaml.FullLoader
+        )
         return dict_data
 
     def read_yaml(self, yml_path):
@@ -62,9 +64,7 @@ class ComYaml:
             return values_dict
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # print(os.getcwd())
-    path = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/dome.yaml'
+    path = "/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/dome.yaml"
     print(ComYaml().read_yaml(path))

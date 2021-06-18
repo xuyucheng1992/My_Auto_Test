@@ -20,11 +20,11 @@ from common.com_log import ComLog
 from common.com_db import ComDB
 from jsonpath_rw import jsonpath, parse
 import logging
+
 ComLog().use_log()
 
 
-class ComManage():
-
+class ComManage:
     def manage_request(self, request_param):
         """
         入口函数,传单个请求，处理用例中维护的validate,将$..returncode 替换为实际结果
@@ -37,7 +37,7 @@ class ComManage():
         # logging.info(f"入口函数manage_request接受到的参数{request_param}")
         resp = ComRequests().send_requests(request_param)
         logging.info(f"请求接口响应结果是{resp.json()}")
-        validates = request_param['validate']
+        validates = request_param["validate"]
         # 提取validate中的实际值
         validates_new = self.process_validate(resp, validates)
         # 做断言
@@ -45,8 +45,7 @@ class ComManage():
             assert self.manage_assert(validate)
         return True
 
-
-    def manage_test_params(self,file_name):
+    def manage_test_params(self, file_name):
         path = ComConfig().test_params_path()
         return ComParams().params_can_requests(path, file_name)
 
@@ -74,7 +73,7 @@ class ComManage():
         :param resp_type: 提取的类型1.提取某个字段值，2.需要所有的response
         :return: 实际结果
         """
-        if resp_type == 'text':
+        if resp_type == "text":
             return resp.text
         else:
             return [math.value for math in parse(resp_type).find(resp.json())][0]
@@ -89,25 +88,32 @@ class ComManage():
         for key, value in validate.items():
             assert_type = key
             # 判断预期值是否需要查询数据库
-            if 'from' in value[1]:
+            if "from" in value[1]:
                 resluts = ComDB().db_select(value[1])
                 expect = ComDB().format_list(resluts)[0]
             else:
                 expect = value[1]
             actual = value[0]
-            if assert_type == 'equal':
+            if assert_type == "equal":
                 return ComAssert().equal(expect, actual)
-            elif assert_type == 'contain':
+            elif assert_type == "contain":
                 return ComAssert().contain(expect, actual)
-            elif assert_type == 'not_contain':
+            elif assert_type == "not_contain":
                 return ComAssert().not_contain(expect, actual)
 
 
-if __name__ == '__main__':
-    parasm = [{'case_id': 'login_case_001', 'url': 'https://uapi.flashparking.cn/v1/member/login', 'method': 'post',
-               'data': 'mobile=18621289233&verifycode=931136',
-               'validate': "[{'equal': ['$..returncode', 0000]}, {'contain': ['text', 18621289233]}]",
-               'relevance': "[{'mId': '$..mId'}, {'c_token': '$..token'}]"}, '登录']
+if __name__ == "__main__":
+    parasm = [
+        {
+            "case_id": "login_case_001",
+            "url": "https://uapi.flashparking.cn/v1/member/login",
+            "method": "post",
+            "data": "mobile=18621289233&verifycode=931136",
+            "validate": "[{'equal': ['$..returncode', 0000]}, {'contain': ['text', 18621289233]}]",
+            "relevance": "[{'mId': '$..mId'}, {'c_token': '$..token'}]",
+        },
+        "登录",
+    ]
 
     ComManage().manage_request(parasm)
     # resp_type = '$..returncode'

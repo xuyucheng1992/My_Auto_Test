@@ -1,0 +1,19 @@
+Collections:
+  case_dec: 绑定优惠券
+  host : c_host
+  parameters:
+    -
+      title: 绑定卷码
+      case_id: bindingDeductingCoupon_001
+      url: /v2/promo/equity/bindingNewDeductingCoupon
+      method: post
+      data: uid=81555438&couponNo=336869952034177024
+      validate: # 断言，期望值
+        - equal: #equal 是封装的断言方法
+          - $..returncode
+          - '0000'
+      variables:  #需要获取的变量值（本用例需要）
+        -db:
+          -
+      relevance: # 提取出去的参数
+        -

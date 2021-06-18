@@ -13,11 +13,11 @@
 """
 import logging
 from common.com_log import ComLog
+
 ComLog().use_log()
 
 
-class ComAssert():
-
+class ComAssert:
     def equal(self, expect, actual):
         """
 
@@ -54,7 +54,6 @@ class ComAssert():
         return True
 
 
-
-if __name__=='__main__':
-    a = ComAssert().equal([21],[11])
+if __name__ == "__main__":
+    a = ComAssert().equal([21], [11])
     print(a)

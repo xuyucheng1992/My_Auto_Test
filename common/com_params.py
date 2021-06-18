@@ -20,8 +20,7 @@ import json
 import jsonpath
 
 
-class ComParams():
-
+class ComParams:
     def yaml_params2(self, yaml_path):
         """
         已废弃
@@ -36,43 +35,45 @@ class ComParams():
         if Path(yaml_path).is_dir():
             for data in params:
                 # print(f'初始的{data}')
-                api_param['case_dec'] = data['Collections']['case_dec']
-                api_param['host'] = data['Collections']['host']
+                api_param["case_dec"] = data["Collections"]["case_dec"]
+                api_param["host"] = data["Collections"]["host"]
                 # if  len(data['Collections']['host']['parameters'])
-                for data_parameters in data['Collections']['parameters']:
-                    api_param['case_id'] = data_parameters['case_id']
+                for data_parameters in data["Collections"]["parameters"]:
+                    api_param["case_id"] = data_parameters["case_id"]
                     # api_param['url'] = params['Collections']['host'] + data_parameters['url']
-                    api_param['method'] = data_parameters['method']
-                    api_param['title'] = data_parameters['title']
-                    api_param['data'] = data_parameters['data']
+                    api_param["method"] = data_parameters["method"]
+                    api_param["title"] = data_parameters["title"]
+                    api_param["data"] = data_parameters["data"]
 
-                    api_param['json'] = data_parameters['json']
-                    api_param['urlparams'] = data_parameters['urlparams']
-                    api_param['validate'] = data_parameters['validate']
-                    api_param['variables'] = data_parameters['variables']
+                    api_param["json"] = data_parameters["json"]
+                    api_param["urlparams"] = data_parameters["urlparams"]
+                    api_param["validate"] = data_parameters["validate"]
+                    api_param["variables"] = data_parameters["variables"]
 
-                    api_param['relevance'] = data_parameters['relevance']
+                    api_param["relevance"] = data_parameters["relevance"]
 
                     apis_params.append(api_param)
                     # print(f'处理后的{api_param}')
                     api_param = {}
         elif str(yaml_path).endswith(".yaml"):
-            api_param['case_dec'] = params['Collections']['case_dec']
+            api_param["case_dec"] = params["Collections"]["case_dec"]
             # api_param['host'] = params['Collections']['host']
             # if  len(data['Collections']['host']['parameters'])
-            for data_parameters in params['Collections']['parameters']:
-                api_param['case_id'] = data_parameters['case_id']
-                api_param['url'] = params['Collections']['host'] + data_parameters['url']
-                api_param['method'] = data_parameters['method']
-                api_param['title'] = data_parameters['title']
-                api_param['data'] = data_parameters['data']
+            for data_parameters in params["Collections"]["parameters"]:
+                api_param["case_id"] = data_parameters["case_id"]
+                api_param["url"] = (
+                    params["Collections"]["host"] + data_parameters["url"]
+                )
+                api_param["method"] = data_parameters["method"]
+                api_param["title"] = data_parameters["title"]
+                api_param["data"] = data_parameters["data"]
 
-                api_param['json'] = data_parameters['json']
-                api_param['urlparams'] = data_parameters['urlparams']
-                api_param['validate'] = data_parameters['validate']
-                api_param['variables'] = data_parameters['variables']
+                api_param["json"] = data_parameters["json"]
+                api_param["urlparams"] = data_parameters["urlparams"]
+                api_param["validate"] = data_parameters["validate"]
+                api_param["variables"] = data_parameters["variables"]
 
-                api_param['relevance'] = data_parameters['relevance']
+                api_param["relevance"] = data_parameters["relevance"]
 
                 apis_params.append(api_param)
                 api_param = {}
@@ -126,17 +127,17 @@ class ComParams():
                 param_value["method"] = method
 
                 # data
-                if 'data' in parameter:
+                if "data" in parameter:
                     re_data = str(parameter["data"])
                     param_value["data"] = re_data
 
-                if 'json' in parameter:
+                if "json" in parameter:
                     param_value["json_data"] = parameter["json"]
 
                 # header
                 # header = str(parameter["header"])
-                if 'header' in parameter:
-                    header = data[1]['header']
+                if "header" in parameter:
+                    header = data[1]["header"]
                     param_value["header"] = header
 
                 # validate
@@ -162,7 +163,7 @@ class ComParams():
                     param_value["variables"] = variables
 
                 # 键值对 name_i:param_value
-                key = data[0] + F"_{i}"
+                key = data[0] + f"_{i}"
                 params[key] = param_value
 
                 # 组成param
@@ -187,12 +188,16 @@ class ComParams():
         params = ComParams().test_params(yaml_path, yaml_name)
         params_can_requests = []
         for param in params:  # 循环每个请求，判断是否有前置参数,并做替换操作
-            if 'variables_data' in str(param):
+            if "variables_data" in str(param):
                 variables_data = param[0]["variables_data"]
-                variables = eval(param[0]['variables'])
-                variable_relevances_new = ComParams().get_replace_param(yaml_path, variables)
+                variables = eval(param[0]["variables"])
+                variable_relevances_new = ComParams().get_replace_param(
+                    yaml_path, variables
+                )
                 for variable_data in variables_data:
-                    param = str(param).replace(F"${variable_data}", str(variable_relevances_new[variable_data]))
+                    param = str(param).replace(
+                        f"${variable_data}", str(variable_relevances_new[variable_data])
+                    )
                     param = eval(param)
             params_can_requests.append(param)
         return params_can_requests
@@ -212,31 +217,33 @@ class ComParams():
 
         for i in variables:
             for case in i.items():
-                variable_from_file = case[0].split('_')[0]
-                variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
-            variable_from_file = variable_from_file + '.yaml'
+                variable_from_file = case[0].split("_")[0]
+                variable_from_case = case[0].split("_")[1] + "_" + case[0].split("_")[2]
+            variable_from_file = variable_from_file + ".yaml"
             variable_params = ComParams().test_params(yaml_path, variable_from_file)
             # 找到读取用例中的case_id相应的参数
             for variable_param in variable_params:
                 if variable_from_case in str(variable_param[0]):
                     variable_param = variable_param
             response = ComRequests().send_requests(variable_param[0])
-            variable_relevances = variable_param[0]['relevance']
+            variable_relevances = variable_param[0]["relevance"]
             # print(variable_relevances)
             # variable_relevances 是个dict组成的 list
             for relevance in eval(variable_relevances):
                 # relevance 是 key：value  mId：$..mId
                 for key, value in relevance.items():
                     # 根据value $..mId 提取出response中的值
-                    find_value = [match.value for match in parse(value).find(response.json())]
+                    find_value = [
+                        match.value for match in parse(value).find(response.json())
+                    ]
                     # print(find_value) # [81555438]，['dd2005dba9404de183773b3b8c0a1dac']
 
                     variable_relevances_new[key] = find_value[0]
             # 针对token 专门做下处理
-            if 'token' in str(variable_relevances_new):
+            if "token" in str(variable_relevances_new):
                 mid = variable_relevances_new["mId"]
                 token = variable_relevances_new["c_token"]
-                variable_relevances_new["c_token"] = str(mid) + '_' + token
+                variable_relevances_new["c_token"] = str(mid) + "_" + token
             # print(variable_relevances_new)
         return variable_relevances_new
 
@@ -268,7 +275,7 @@ class ComParams():
         return new_params_titles
 
     def param_to_requesr(self, yaml_path, yaml_name):
-        '''
+        """
         读取文件
         判断是否有关联参数
             如果有就读取出关联参数的文件名
@@ -281,44 +288,44 @@ class ComParams():
 
         :return: 把数据处理成可直接调-----主要是关联参数的替换
 
-        '''
+        """
         params = ComParams().test_params(yaml_path, yaml_name)
         params_can_requests = []
         for param in params:  # 循环每个请求，判断是否有前置参数
-            if 'variables_data' not in str(param):
+            if "variables_data" not in str(param):
                 params_can_requests.append(param)
-            if 'variables_data' in str(param):
+            if "variables_data" in str(param):
                 variables_data = param[0]["variables_data"]
-                variables = eval(param[0]['variables'])
+                variables = eval(param[0]["variables"])
                 for i in variables:
                     for case in i.items():
-                        variable_from_file = case[0].split('_')[0]
-                        variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
-                    variable_from_file = variable_from_file + '.yaml'
+                        variable_from_file = case[0].split("_")[0]
+                        variable_from_case = (
+                            case[0].split("_")[1] + "_" + case[0].split("_")[2]
+                        )
+                    variable_from_file = variable_from_file + ".yaml"
                     return ComParams().param_to_requesr(yaml_path, variable_from_file)
             return params_can_requests
 
-    def get_variable_from_file(self,variables):
+    def get_variable_from_file(self, variables):
         """
         variables: 传入variables = eval(param[0]['variables'])
                          [{'login_case_001': ['mId', 'c_token']},{'login_case_002': ['mId', 'c_token']}]
         :return: 将关联参数的 文件名：用例id 组成一个字典
         """
-        variable_from ={}#将关联参数的文件名：案例id组成一个字典
+        variable_from = {}  # 将关联参数的文件名：案例id组成一个字典
         for i in variables:
             for case in i.items():
-                variable_from_file = case[0].split('_')[0]
-                variable_from_case = case[0].split('_')[1] + '_' + case[0].split('_')[2]
-            variable_from_file = variable_from_file + '.yaml'
-            variable_from[variable_from_file]=variable_from_case
+                variable_from_file = case[0].split("_")[0]
+                variable_from_case = case[0].split("_")[1] + "_" + case[0].split("_")[2]
+            variable_from_file = variable_from_file + ".yaml"
+            variable_from[variable_from_file] = variable_from_case
         print(variable_from)
         return variable_from
 
 
-
-
-if __name__ == '__main__':
-    path = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
+if __name__ == "__main__":
+    path = "/Users/echo/PycharmProjects/My_Auto_Test/yaml_data"
     # # 我这一股脑的读出来，怎么确定执行顺序呢，如果有不想执行的怎么办
     # apis = ComParams().yaml_params(path)
     # print(apis)
@@ -327,8 +334,8 @@ if __name__ == '__main__':
     test_apis = ComParams().params_can_requests(path2, 'searchCouponsDetail.yaml')
     print(test_apis)
     """
-    path2 = '/Users/echo/PycharmProjects/My_Auto_Test/yaml_data'
-    test_apis = ComParams().params_can_requests(path2, 'searchCouponsDetail.yaml')
+    path2 = "/Users/echo/PycharmProjects/My_Auto_Test/yaml_data"
+    test_apis = ComParams().params_can_requests(path2, "searchCouponsDetail.yaml")
     print(test_apis[0])
     # bar = [{'searchCouponsList_case_001': ['couponsCode']}, {'login_case_001': [ 'c_token']}]
     # a = ComParams().params_can_requests(path,bar)
