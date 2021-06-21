@@ -1,0 +1,10 @@
+# Default ignored files
+
+/.idea/
+/.pytest_cache
+
+
+/my_tools/
+/venv/
+/venv/lib/python3.7/site-packages/*
+/venv/lib/python3.7/site-packages/
