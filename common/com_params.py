@@ -150,6 +150,7 @@ class ComParams:
                     param_value["relevance"] = relevance
 
                 # 非必须：依赖数据（后置用例），获取parameter中所有以$开头的字段
+                # print(f"-----parameter的值----{parameter}")
                 variables_data = re.findall("\\$[A-za-z0-9]+", str(parameter))
                 if variables_data:
                     values = []
@@ -335,8 +336,8 @@ if __name__ == "__main__":
     print(test_apis)
     """
     path2 = "/Users/echo/PycharmProjects/My_Auto_Test/yaml_data"
-    test_apis = ComParams().params_can_requests(path2, "searchCouponsDetail.yaml")
-    print(test_apis[0])
+    test_apis = ComParams().yaml_params("/Users/echo/PycharmProjects/My_Auto_Test/yaml_data/dome.yaml")
+    print(test_apis)
     # bar = [{'searchCouponsList_case_001': ['couponsCode']}, {'login_case_001': [ 'c_token']}]
     # a = ComParams().params_can_requests(path,bar)
     # print(a)

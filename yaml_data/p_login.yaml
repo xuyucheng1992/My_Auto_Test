@@ -1,0 +1,11 @@
+Collections:
+  case_dec: p_login    #测试用例集描述
+  host : p_host  #域名
+  parameters:
+    -
+      title: 登录-p#测试用例
+      case_id: p_login_case_001 #每个文件里都维护个case_id
+      url: /api/oauth/token # 路径
+      method: post #请求方法
+      data: grant_type=client_credentials&client_id=admin&client_secret=743675b6c7b9901667e60f1307433443
+      validate:
